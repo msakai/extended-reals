@@ -132,10 +132,10 @@ prop_recip_inverse =
     isFinite a && a /= 0 ==> recip (recip a) == a
 
 case_recip_PosInf :: IO ()
-case_recip_PosInf = recip PosInf @?= 0
+case_recip_PosInf = recip PosInf @?= (0 :: Extended Rational)
 
 case_recip_NegInf :: IO ()
-case_recip_NegInf = recip NegInf @?= 0
+case_recip_NegInf = recip NegInf @?= (0 :: Extended Rational)
 
 prop_NegInf_smallest :: Property
 prop_NegInf_smallest =
