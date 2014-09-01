@@ -131,6 +131,12 @@ prop_recip_inverse =
   forAll arbitrary $ \(a :: Extended Rational) ->
     isFinite a && a /= 0 ==> recip (recip a) == a
 
+case_recip_PosInf :: IO ()
+case_recip_PosInf = recip PosInf @?= 0
+
+case_recip_NegInf :: IO ()
+case_recip_NegInf = recip NegInf @?= 0
+
 prop_NegInf_smallest :: Property
 prop_NegInf_smallest =
   forAll arbitrary $ \(a :: Extended Rational) ->
