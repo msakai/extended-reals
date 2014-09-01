@@ -13,6 +13,11 @@ category:            Math
 build-type:          Simple
 extra-source-files:  .travis.yml
 cabal-version:       >=1.10
+bug-reports:         https://github.com/msakai/extended-real/issues
+
+source-repository head
+  type:     git
+  location: git://github.com/msakai/extended-real.git
 
 library
   exposed-modules:     Data.ExtendedReal
