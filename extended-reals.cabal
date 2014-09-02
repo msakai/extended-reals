@@ -1,5 +1,5 @@
 name:                extended-reals
-version:             0.1.0.0
+version:             0.1.1.0
 synopsis:            Extension of real numbers with positive/negative infinities
 description:
   Extension of real numbers with positive/negative infinities (±∞).
