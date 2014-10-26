@@ -28,6 +28,7 @@
 -----------------------------------------------------------------------------
 module Data.ExtendedReal
   ( Extended (..)
+  , inf
   , isFinite
   , isInfinite
   ) where
@@ -62,6 +63,10 @@ instance Hashable r => Hashable (Extended r) where
   hashWithSalt s NegInf     = s `hashWithSalt` (0::Int)
   hashWithSalt s (Finite x) = s `hashWithSalt` (1::Int) `hashWithSalt` x
   hashWithSalt s PosInf     = s `hashWithSalt` (2::Int)
+
+-- | Infinity (∞)
+inf :: Extended r
+inf = PosInf
 
 -- | @isFinite x = not (isInfinite x)@.
 isFinite :: Extended r -> Bool

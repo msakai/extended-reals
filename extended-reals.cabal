@@ -11,7 +11,7 @@ author:              Masahiro Sakai
 maintainer:          masahiro.sakai@gmail.com
 category:            Math
 build-type:          Simple
-extra-source-files:  .travis.yml
+extra-source-files:  .travis.yml, CHANGELOG.markdown
 cabal-version:       >=1.10
 bug-reports:         https://github.com/msakai/extended-reals/issues
 

@@ -71,7 +71,7 @@ prop_mult_comm =
 -- PosInf + NegInf is left undefined
 case_add_PosInf_NegInf :: IO ()
 case_add_PosInf_NegInf =
-  eval (PosInf + NegInf :: Extended Rational) @?= Nothing
+  eval (inf + (- inf) :: Extended Rational) @?= Nothing
 
 prop_mult_assoc :: Property
 prop_mult_assoc =
@@ -109,12 +109,12 @@ prop_mult_monotone =
 -- We define 0 * PosInf = 0
 case_mult_zero_PosInf :: IO ()
 case_mult_zero_PosInf =
-  0 * PosInf @?= (0 :: Extended Rational)
+  0 * inf @?= (0 :: Extended Rational)
 
 -- We define 0 * NegInf = 0
 case_mult_zero_NegInf :: IO ()
 case_mult_zero_NegInf =
-  0 * NegInf @?= (0 :: Extended Rational)
+  0 * (- inf) @?= (0 :: Extended Rational)
 
 prop_negate_inverse :: Property
 prop_negate_inverse = 
@@ -132,20 +132,20 @@ prop_recip_inverse =
     isFinite a && a /= 0 ==> recip (recip a) == a
 
 case_recip_PosInf :: IO ()
-case_recip_PosInf = recip PosInf @?= (0 :: Extended Rational)
+case_recip_PosInf = recip inf @?= (0 :: Extended Rational)
 
 case_recip_NegInf :: IO ()
-case_recip_NegInf = recip NegInf @?= (0 :: Extended Rational)
+case_recip_NegInf = recip (- inf) @?= (0 :: Extended Rational)
 
 prop_NegInf_smallest :: Property
 prop_NegInf_smallest =
   forAll arbitrary $ \(a :: Extended Rational) ->
-    NegInf <= a
+    -inf <= a
 
 prop_PosInf_largest :: Property
 prop_PosInf_largest =
   forAll arbitrary $ \(a :: Extended Rational) ->
-    a <= PosInf
+    a <= inf
 
 -- ----------------------------------------------------------------------
 -- Test harness
