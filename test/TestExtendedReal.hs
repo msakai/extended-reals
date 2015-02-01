@@ -2,12 +2,14 @@
 {-# LANGUAGE TemplateHaskell, ScopedTypeVariables #-}
 
 import Prelude hiding (isInfinite)
+import Control.DeepSeq
 import Control.Exception (SomeException, evaluate, try)
 import Control.Monad
 import Data.Maybe
 import System.IO.Unsafe (unsafePerformIO)
 import Test.HUnit hiding (Test)
 import Test.QuickCheck
+import Test.QuickCheck.Function
 import Test.Framework.TH
 import Test.Framework.Providers.HUnit
 import Test.Framework.Providers.QuickCheck2
@@ -137,15 +139,56 @@ case_recip_PosInf = recip inf @?= (0 :: Extended Rational)
 case_recip_NegInf :: IO ()
 case_recip_NegInf = recip (- inf) @?= (0 :: Extended Rational)
 
-prop_NegInf_smallest :: Property
-prop_NegInf_smallest =
+prop_minBound_smallest :: Property
+prop_minBound_smallest =
   forAll arbitrary $ \(a :: Extended Rational) ->
-    -inf <= a
+    minBound <= a
 
-prop_PosInf_largest :: Property
-prop_PosInf_largest =
+prop_maxBound_largest :: Property
+prop_maxBound_largest =
   forAll arbitrary $ \(a :: Extended Rational) ->
-    a <= inf
+    a <= maxBound
+
+prop_isFinite_fromRational :: Property
+prop_isFinite_fromRational =
+  forAll arbitrary $ \a -> isFinite (fromRational a :: Extended Rational)
+
+prop_isInfinite_PosInf :: Property
+prop_isInfinite_PosInf = property $ isInfinite PosInf
+
+prop_isInfinite_NegInf :: Property
+prop_isInfinite_NegInf = property $ isInfinite NegInf
+
+-- ----------------------------------------------------------------------
+-- Functor
+
+prop_Functor_id :: Property
+prop_Functor_id =
+  forAll arbitrary $ \(a :: Extended Integer) ->
+    fmap id a == a
+
+prop_Functor_comp :: Property
+prop_Functor_comp =
+  forAll arbitrary $ \(f :: Fun Integer Integer) ->
+  forAll arbitrary $ \(g :: Fun Integer Integer) ->
+  forAll arbitrary $ \(a :: Extended Integer) ->
+    fmap (apply f . apply g) a == fmap (apply f) (fmap (apply g) a)
+
+-- ----------------------------------------------------------------------
+-- Show / Read
+
+prop_read_show :: Property
+prop_read_show =
+  forAll arbitrary $ \(a :: Extended Rational) ->
+    read (show a) == a
+
+-- ----------------------------------------------------------------------
+-- deepseq
+
+prop_deepseq :: Property
+prop_deepseq =
+  forAll arbitrary $ \(a :: Extended Rational) ->
+    a `deepseq` () == ()
 
 -- ----------------------------------------------------------------------
 -- Test harness
