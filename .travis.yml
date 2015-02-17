@@ -43,6 +43,7 @@ install:
  - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
  - travis_retry cabal update
  - "[ -n \"$COVERAGE\" ] && cabal install hpc-coveralls || true"
+ - cabal install hlint
  - cabal install --only-dependencies --enable-tests --enable-benchmarks
 
 # Here starts the actual work to be performed for the package under test; any command which exits with a non-zero exit code causes the build to fail.
@@ -53,6 +54,7 @@ script:
  - cabal test
  - cabal check
  - cabal sdist   # tests that a source-distribution can be generated
+ - hlint --cpp-file=dist/build/autogen/cabal_macros.h src
 
 # The following scriptlet checks that the resulting source distribution can be built & installed
  - export SRC_TGZ=$(cabal info . | awk '{print $2 ".tar.gz";exit}') ;
