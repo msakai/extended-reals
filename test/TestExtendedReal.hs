@@ -7,12 +7,11 @@ import Control.Exception (SomeException, evaluate, try)
 import Control.Monad
 import Data.Maybe
 import System.IO.Unsafe (unsafePerformIO)
-import Test.HUnit hiding (Test)
-import Test.QuickCheck
+
 import Test.QuickCheck.Function
-import Test.Framework.TH
-import Test.Framework.Providers.HUnit
-import Test.Framework.Providers.QuickCheck2
+import Test.Tasty.QuickCheck
+import Test.Tasty.HUnit
+import Test.Tasty.TH
 
 import Data.ExtendedReal
 
