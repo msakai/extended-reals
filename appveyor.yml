@@ -7,6 +7,7 @@ cache:
 environment:
   global:
     STACK_ROOT: "c:\\sr"
+    STACK_YAML: "stack-ghc-8.2.yaml"
 
 install:
 #- curl -ostack.zip -L --insecure http://www.stackage.org/stack/windows-x86_64
