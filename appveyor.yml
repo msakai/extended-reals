@@ -9,8 +9,8 @@ environment:
     STACK_ROOT: "c:\\sr"
 
 install:
-#- curl -ostack.zip -L --insecure http://www.stackage.org/stack/windows-x86_64
-- curl -ostack.zip -L --insecure http://www.stackage.org/stack/windows-i386
+- curl -ostack.zip -L --insecure http://www.stackage.org/stack/windows-x86_64
+#- curl -ostack.zip -L --insecure http://www.stackage.org/stack/windows-i386
 - 7z x stack.zip stack.exe
 - stack setup > nul
 
