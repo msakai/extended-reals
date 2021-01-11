@@ -44,8 +44,12 @@ jobs:
         run: |
           echo "resolver: ${{ matrix.resolver }}" > stack.yaml
           stack build --test --no-run-tests --bench --no-run-benchmarks ${{ matrix.flags }}
+
       - name: Test
         run: stack test ${{ matrix.flags }}
+
+      - name: Create source tarball
+        run: stack sdist ${{ matrix.flags }}
 
       - name: Coveralls
         if: matrix.coveralls
