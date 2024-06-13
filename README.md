@@ -1,7 +1,6 @@
 extended-reals
 ==============
 
-[![Build Status (Travis CI)](https://secure.travis-ci.org/msakai/extended-reals.png?branch=master)](http://travis-ci.org/msakai/extended-reals) 
 [![Build Status (AppVeyor)](https://ci.appveyor.com/api/projects/status/r9v6hp2gldge2jih?svg=true)](https://ci.appveyor.com/project/msakai/extended-reals)
 [![Build Status (GitHub Actions)](https://github.com/msakai/extended-reals/workflows/build/badge.svg)](https://github.com/msakai/extended-reals/actions)
 [![Hackage](https://img.shields.io/hackage/v/extended-reals.svg)](https://hackage.haskell.org/package/extended-reals)
