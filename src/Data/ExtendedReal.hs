@@ -31,13 +31,15 @@ module Data.ExtendedReal
   , inf
   , isFinite
   , isInfinite
+  , fromRealFloat
   ) where
 
 import Prelude hiding (isInfinite)
+import qualified Prelude as P
 import Control.DeepSeq
-import Data.Data
+import Data.Data (Data)
 import Data.Hashable
-import Data.Typeable
+import Data.Typeable (Typeable)
 
 -- | @Extended r@ is an extension of /r/ with positive/negative infinity (±∞).
 data Extended r
@@ -133,3 +135,20 @@ scale a e = seq e $
         NegInf   -> PosInf
         Finite b -> Finite (a*b)
         PosInf   -> NegInf
+
+-- | Helper to convert 'Double' and 'Float' to 'Extended',
+-- taking care of infinite values automatically.
+--
+-- >>> fromRealFloat (1 / 0)
+-- PosInf
+-- >>> fromRealFloat (-1 / 0)
+-- NegInf
+-- >>> fromRealFloat (0 / 0)
+-- *** Exception: fromRealFloat: argument should not be NaN
+--
+-- @since 0.2.5.0
+fromRealFloat :: RealFloat r => r -> Extended r
+fromRealFloat x
+  | isNaN x = error "fromRealFloat: argument should not be NaN"
+  | P.isInfinite x = if x > 0 then PosInf else NegInf
+  | otherwise = Finite x
