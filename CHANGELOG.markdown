@@ -1,3 +1,7 @@
+# 0.2.5.0
+
+* add `fromRealFloat` helper
+
 # 0.2.4.0 (2020-03-28)
 
 * support GHC 8.4, 8.6, 8.8
