@@ -11,7 +11,7 @@ author:              Masahiro Sakai
 maintainer:          masahiro.sakai@gmail.com
 category:            Math
 build-type:          Simple
-extra-source-files:  .travis.yml, CHANGELOG.markdown
+extra-source-files:  CHANGELOG.markdown
 cabal-version:       >=1.10
 bug-reports:         https://github.com/msakai/extended-reals/issues
 tested-with:
@@ -25,7 +25,7 @@ tested-with:
 
 source-repository head
   type:     git
-  location: git://github.com/msakai/extended-reals.git
+  location: https://github.com/msakai/extended-reals.git
 
 library
   exposed-modules:     Data.ExtendedReal
@@ -42,10 +42,10 @@ Test-suite TestExtendedReal
      base,
      deepseq,
      HUnit >=1.2 && <1.7,
-     QuickCheck >=2.6 && <2.15,
+     QuickCheck >=2.6 && <2.16,
      tasty >=0.10.1,
      tasty-hunit >=0.9 && <0.11,
-     tasty-quickcheck >=0.8 && <0.11,
+     tasty-quickcheck >=0.8 && <0.12,
      tasty-th,
      extended-reals
   Default-Language: Haskell2010
