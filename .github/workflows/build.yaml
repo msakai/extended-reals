@@ -23,9 +23,9 @@ jobs:
             resolver: 'nightly-2020-11-01'
             flags: ''
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: haskell/actions/setup@v1
+      - uses: haskell-actions/setup@v2
         name: Setup Haskell
         with:
           ghc-version: ${{ matrix.ghc }}
@@ -34,7 +34,7 @@ jobs:
           stack-no-global: true
           stack-setup-ghc: true
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v4
         name: Cache ~/.stack
         with:
           path: ~/.stack
