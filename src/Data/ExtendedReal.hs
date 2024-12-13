@@ -46,7 +46,7 @@ data Extended r
   = NegInf    -- ^ negative infinity (-∞)
   | Finite !r -- ^ finite value
   | PosInf    -- ^ positive infinity (+∞)
-  deriving (Ord, Eq, Show, Read, Typeable, Data)
+  deriving (Ord, Eq, Show, Read, Data)
 
 instance Bounded (Extended r) where
   minBound = NegInf
