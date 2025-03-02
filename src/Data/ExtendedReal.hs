@@ -1,14 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveLift #-}
+{-# LANGUAGE DeriveTraversable #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.ExtendedReal
 -- Copyright   :  (c) Masahiro Sakai 2014
 -- License     :  BSD-style
--- 
 -- Maintainer  :  masahiro.sakai@gmail.com
--- Stability   :  provisional
--- Portability :  non-portable (DeriveDataTypeable)
 --
 -- Extension of real numbers with positive/negative infinities (±∞).
 -- It is useful for describing various limiting behaviors in mathematics.
@@ -39,32 +39,34 @@ import qualified Prelude as P
 import Control.DeepSeq
 import Data.Data (Data)
 import Data.Hashable
-import Data.Typeable (Typeable)
+import GHC.Generics (Generic)
+import Language.Haskell.TH.Syntax (Lift)
 
 -- | @Extended r@ is an extension of /r/ with positive/negative infinity (±∞).
 data Extended r
   = NegInf    -- ^ negative infinity (-∞)
   | Finite !r -- ^ finite value
   | PosInf    -- ^ positive infinity (+∞)
-  deriving (Ord, Eq, Show, Read, Data)
+  deriving
+  ( Ord
+  , Eq
+  , Show
+  , Read
+  , Data
+  , Functor
+  , Foldable    -- ^ @since 0.2.6.0
+  , Traversable -- ^ @since 0.2.6.0
+  , Generic     -- ^ @since 0.2.6.0
+  , Lift        -- ^ @since 0.2.6.0
+  )
 
 instance Bounded (Extended r) where
   minBound = NegInf
   maxBound = PosInf
 
-instance Functor Extended where
-  fmap _ NegInf = NegInf
-  fmap f (Finite x) = Finite (f x)
-  fmap _ PosInf = PosInf
+instance NFData r => NFData (Extended r)
 
-instance NFData r => NFData (Extended r) where
-  rnf (Finite x) = rnf x
-  rnf _ = ()
-
-instance Hashable r => Hashable (Extended r) where
-  hashWithSalt s NegInf     = s `hashWithSalt` (0::Int)
-  hashWithSalt s (Finite x) = s `hashWithSalt` (1::Int) `hashWithSalt` x
-  hashWithSalt s PosInf     = s `hashWithSalt` (2::Int)
+instance Hashable r => Hashable (Extended r)
 
 -- | Infinity (∞)
 inf :: Extended r

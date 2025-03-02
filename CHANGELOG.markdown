@@ -1,3 +1,7 @@
+# 0.2.6.0
+
+* add `instance {Foldable,Traversable,Generic,Lift}`
+
 # 0.2.5.0
 
 * add `fromRealFloat` helper
