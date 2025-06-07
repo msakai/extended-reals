@@ -43,6 +43,7 @@ import Control.DeepSeq
 import Data.Data (Data)
 import Data.Hashable
 import GHC.Generics (Generic)
+import qualified GHC.Real
 import Language.Haskell.TH.Syntax (Lift)
 
 -- | @Extended r@ is an extension of /r/ with positive/negative infinity (±∞).
@@ -129,7 +130,11 @@ instance (Fractional r, Ord r) => Fractional (Extended r) where
   recip (Finite x) = Finite (1/x)
   recip _ = Finite 0
 
-  fromRational = Finite . fromRational
+  fromRational r
+    | r == GHC.Real.notANumber = error "fromRational: argument should not be NaN"
+    | r == GHC.Real.infinity = PosInf
+    | r == -GHC.Real.infinity = NegInf
+    | otherwise = Finite $ fromRational r
 
 -- Note that we define @0 * PosInf = 0 * NegInf = 0@ by the convention of probability or measure theory.
 scale :: (Num r, Ord r) => r -> Extended r -> Extended r

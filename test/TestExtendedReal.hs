@@ -11,6 +11,7 @@ import Control.DeepSeq
 import Control.Exception (SomeException, evaluate, try)
 import Data.Maybe
 import Data.Ord (Down(..))
+import qualified GHC.Real
 import System.IO.Unsafe (unsafePerformIO)
 
 import Test.QuickCheck.Function
@@ -173,6 +174,23 @@ prop_maxBound_largest =
 prop_isFinite_fromRational :: Property
 prop_isFinite_fromRational =
   forAll arbitrary $ \a -> isFinite (fromRational a :: Extended Rational)
+
+prop_fromRational_PosInf :: Property
+prop_fromRational_PosInf = once $
+  fromRational GHC.Real.infinity === (PosInf :: Extended Rational)
+
+prop_fromRational_NegInf :: Property
+prop_fromRational_NegInf = once $
+  fromRational (-GHC.Real.infinity) === (NegInf :: Extended Rational)
+
+prop_fromRational_NaN :: Property
+prop_fromRational_NaN = once $ ioProperty $ do
+  let nan :: Extended Double
+      nan = fromRational GHC.Real.notANumber
+  nan' <- try $ evaluate nan
+  pure $ case nan' of
+    Left (_ :: SomeException) -> True
+    Right _ -> False
 
 prop_isInfinite_PosInf :: Property
 prop_isInfinite_PosInf = property $ isInfinite PosInf
