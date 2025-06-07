@@ -1,10 +1,14 @@
-{-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 {-# LANGUAGE TemplateHaskell, ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
+
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Avoid restricted function" #-}
+{-# HLINT ignore "Functor law" #-}
+{-# HLINT ignore "Redundant negate" #-}
 
 import Prelude hiding (isInfinite)
 import Control.DeepSeq
 import Control.Exception (SomeException, evaluate, try)
-import Control.Monad
 import Data.Maybe
 import System.IO.Unsafe (unsafePerformIO)
 
@@ -22,7 +26,7 @@ instance Arbitrary r => Arbitrary (Extended r) where
     oneof
     [ return NegInf
     , return PosInf
-    , liftM Finite arbitrary
+    , fmap Finite arbitrary
     ]
 
 eval :: a -> Maybe a
