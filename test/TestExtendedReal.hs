@@ -230,6 +230,33 @@ prop_fromRealFloat_Down_NaN = once $ ioProperty $ do
     Right _ -> False
 
 -- ----------------------------------------------------------------------
+-- toRealFloat
+
+prop_toRealFloat_PosInf :: Property
+prop_toRealFloat_PosInf = once $
+  (1 / 0 :: Double) === toRealFloat PosInf
+
+prop_toRealFloat_NegInf :: Property
+prop_toRealFloat_NegInf = once $
+  (-(1 / 0) :: Double) === toRealFloat NegInf
+
+prop_toRealFloat_Down_NegInf :: Property
+prop_toRealFloat_Down_NegInf = once $
+  (1 / 0 :: Down Double) === toRealFloat NegInf
+
+prop_toRealFloat_Down_PosInf :: Property
+prop_toRealFloat_Down_PosInf = once $
+  (-(1 / 0) :: Down Double) === toRealFloat PosInf
+
+prop_toRealFloat_fromRealFloat :: Double -> Property
+prop_toRealFloat_fromRealFloat x =
+  toRealFloat (fromRealFloat x) === x
+
+prop_fromRealFloat_toRealFloat :: Extended Double -> Property
+prop_fromRealFloat_toRealFloat x =
+  fromRealFloat (toRealFloat x) === x
+
+-- ----------------------------------------------------------------------
 -- Test harness
 
 main :: IO ()

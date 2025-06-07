@@ -3,6 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveLift #-}
 {-# LANGUAGE DeriveTraversable #-}
+{-# LANGUAGE LambdaCase #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.ExtendedReal
@@ -32,6 +33,7 @@ module Data.ExtendedReal
   , isFinite
   , isInfinite
   , fromRealFloat
+  , toRealFloat
   ) where
 
 import Prelude hiding (isInfinite)
@@ -162,3 +164,29 @@ fromRealFloat x
   | isNaN x = error "fromRealFloat: argument should not be NaN"
   | P.isInfinite x = if x > 0 then PosInf else NegInf
   | otherwise = Finite x
+
+-- | Helper to convert 'Extended' to 'Double' or 'Float',
+-- taking care of infinite values automatically.
+--
+-- >>> toRealFloat PosInf :: Double
+-- Infinity
+-- >>> toRealFloat NegInf :: Double
+-- -Infinity
+-- >>> toRealFloat PosInf :: Down Double
+-- Down (-Infinity)
+-- >>> toRealFloat NegInf :: Down Double
+-- Down Infinity
+--
+-- @since 0.2.7.0
+toRealFloat :: RealFloat r => Extended r -> r
+toRealFloat = \case
+  NegInf -> negInf
+  Finite r -> r
+  PosInf -> posInf
+  where
+    -- Less hacky than 1/0, but hacky nevertheless.
+    infinity = encodeFloat 1 maxBound
+    -- For Data.Ord.Down Double an arithmetic positive infinity
+    -- is a negative infinity with regards to Ord instance.
+    posInf = if infinity > 0 then infinity else -infinity
+    negInf = negate posInf
