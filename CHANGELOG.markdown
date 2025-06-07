@@ -1,6 +1,7 @@
 # 0.2.7.0
 
 * add `toRealFloat` helper
+* fix multiplication of infinities for `Extended (Down t)`
 
 # 0.2.6.0
 

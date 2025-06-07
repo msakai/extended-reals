@@ -23,7 +23,7 @@ import Data.ExtendedReal
 -- ----------------------------------------------------------------------
 
 instance Arbitrary r => Arbitrary (Extended r) where
-  arbitrary = 
+  arbitrary =
     oneof
     [ return NegInf
     , return PosInf
@@ -100,7 +100,7 @@ prop_mult_dist =
     ==> eval (a * (b + c)) == eval (a * b + a * c)
 
 prop_mult_zero :: Property
-prop_mult_zero = 
+prop_mult_zero =
   forAll arbitrary $ \(a :: Extended Rational) ->
     0 * a == 0
 
@@ -111,6 +111,23 @@ prop_mult_monotone =
   forAll arbitrary $ \c ->
     a <= b && c > 0 && isDefined (a*c) && isDefined (b*c)
     ==> a*c <= b*c
+
+prop_mult_down_1 :: Property
+prop_mult_down_1 = once $
+  fromRealFloat (sqr infinity) === sqr (fromRealFloat infinity)
+  where
+    infinity :: Down Double
+    infinity = Down (1 / 0)
+
+    sqr :: Num a => a -> a
+    sqr x = x * x
+
+prop_mult_down_2 :: Property
+prop_mult_down_2 = once $
+  fromRealFloat (infinity * (-infinity)) === fromRealFloat infinity * fromRealFloat (-infinity)
+  where
+    infinity :: Down Double
+    infinity = Down (1 / 0)
 
 -- We define 0 * PosInf = 0
 case_mult_zero_PosInf :: IO ()
@@ -123,7 +140,7 @@ case_mult_zero_NegInf =
   0 * (- inf) @?= (0 :: Extended Rational)
 
 prop_negate_inverse :: Property
-prop_negate_inverse = 
+prop_negate_inverse =
   forAll arbitrary $ \(a :: Extended Rational) ->
     negate (negate a) == a
 

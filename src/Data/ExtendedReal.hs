@@ -4,6 +4,7 @@
 {-# LANGUAGE DeriveLift #-}
 {-# LANGUAGE DeriveTraversable #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.ExtendedReal
@@ -98,10 +99,10 @@ instance (Num r, Ord r) => Num (Extended r) where
 
   Finite x1 * e = scale x1 e
   e * Finite x2 = scale x2 e
-  PosInf * PosInf = PosInf
-  PosInf * NegInf = NegInf
-  NegInf * PosInf = NegInf
-  NegInf * NegInf = PosInf
+  PosInf * PosInf = numericPosInf
+  PosInf * NegInf = numericNegInf
+  NegInf * PosInf = numericNegInf
+  NegInf * NegInf = numericPosInf
 
   negate NegInf = PosInf
   negate (Finite x) = Finite (negate x)
@@ -116,6 +117,12 @@ instance (Num r, Ord r) => Num (Extended r) where
   signum PosInf = Finite 1
 
   fromInteger = Finite . fromInteger  
+
+numericPosInf :: forall r. (Ord r, Num r) => Extended r
+numericPosInf = if (1 :: r) >= 0 then PosInf else NegInf
+
+numericNegInf :: forall r. (Ord r, Num r) => Extended r
+numericNegInf = if (1 :: r) >= 0 then NegInf else PosInf
 
 -- | Note that @Extended r@ is /not/ a field, nor a ring.
 instance (Fractional r, Ord r) => Fractional (Extended r) where
