@@ -148,6 +148,14 @@ scale a e = seq e $
 -- >>> fromRealFloat (0 / 0)
 -- *** Exception: fromRealFloat: argument should not be NaN
 --
+-- Beware that an ordinal infinity might not be equal to an arithmetic infinity.
+-- 'PosInf' / 'NegInf' stand for infinite elements with regards to ordering, so:
+--
+-- >>> fromRealFloat (Down (1 / 0))
+-- NegInf
+-- >>> fromRealFloat (Down (-1 / 0))
+-- PosInf
+--
 -- @since 0.2.5.0
 fromRealFloat :: RealFloat r => r -> Extended r
 fromRealFloat x

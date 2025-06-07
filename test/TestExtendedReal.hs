@@ -10,6 +10,7 @@ import Prelude hiding (isInfinite)
 import Control.DeepSeq
 import Control.Exception (SomeException, evaluate, try)
 import Data.Maybe
+import Data.Ord (Down(..))
 import System.IO.Unsafe (unsafePerformIO)
 
 import Test.QuickCheck.Function
@@ -192,6 +193,41 @@ prop_deepseq :: Property
 prop_deepseq =
   forAll arbitrary $ \(a :: Extended Rational) ->
     a `deepseq` () == ()
+
+-- ----------------------------------------------------------------------
+-- fromRealFloat
+
+prop_fromRealFloat_PosInf :: Property
+prop_fromRealFloat_PosInf = once $
+  fromRealFloat (1 / 0 :: Double) === PosInf
+
+prop_fromRealFloat_NegInf :: Property
+prop_fromRealFloat_NegInf = once $
+  fromRealFloat (-(1 / 0) :: Double) === NegInf
+
+prop_fromRealFloat_NaN :: Property
+prop_fromRealFloat_NaN = once $ ioProperty $ do
+  let nan = fromRealFloat (0 / 0 :: Double)
+  nan' <- try $ evaluate nan
+  pure $ case nan' of
+    Left (_ :: SomeException) -> True
+    Right _ -> False
+
+prop_fromRealFloat_Down_NegInf :: Property
+prop_fromRealFloat_Down_NegInf = once $
+  fromRealFloat (1 / 0 :: Down Double) === NegInf
+
+prop_fromRealFloat_Down_PosInf :: Property
+prop_fromRealFloat_Down_PosInf = once $
+  fromRealFloat (-(1 / 0) :: Down Double) === PosInf
+
+prop_fromRealFloat_Down_NaN :: Property
+prop_fromRealFloat_Down_NaN = once $ ioProperty $ do
+  let nan = fromRealFloat (0 / 0 :: Down Double)
+  nan' <- try $ evaluate nan
+  pure $ case nan' of
+    Left (_ :: SomeException) -> True
+    Right _ -> False
 
 -- ----------------------------------------------------------------------
 -- Test harness
